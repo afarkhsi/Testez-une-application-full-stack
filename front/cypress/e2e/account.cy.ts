@@ -27,61 +27,7 @@ describe('Account Page – User Types', () => {
     password: 'clarkkent', 
   };
 
-//   const login = (user: typeof ADMIN | typeof USER) => {
-//     cy.intercept('POST', '/api/auth/login', {
-//       statusCode: 200,
-//       body: user,
-//     }).as('loginRequest');
-
-//     cy.intercept('GET', '/api/auth/me', {
-//       statusCode: 200,
-//       body: user,
-//     }).as('getSession');
-
-//     cy.visit('/login');
-
-//     cy.get('input[formControlName=email]').type(user.email);
-//     cy.get('input[formControlName=password]').type(user.password);
-    
-//     cy.get('button[type=submit]').click()
-
-//     cy.wait('@loginRequest');
-
-//     cy.url().should('include', '/sessions');
-//     cy.get('span.link').contains('Account').click();
-//     cy.url().should('include', '/me');
-//   };
-
-//   context('Admin user', () => {
-//     beforeEach(() => {
-//       login(ADMIN);
-//     });
-
-//     it('should show account info without delete button', () => {
-//       cy.contains(ADMIN.firstName);
-//       cy.contains(ADMIN.lastName);
-//       cy.contains(ADMIN.email);
-//       cy.contains('Create at: June 20, 2025');
-//       cy.contains('Last update: June 20, 2025');
-//       cy.get('button[mat-raised-button]').should('not.exist');
-//     });
-//   });
-
-//   context('Regular user', () => {
-//     beforeEach(() => {
-//       login(USER);
-//     });
-
-//     it('should show account info and delete button', () => {
-//       cy.contains(USER.firstName);
-//       cy.contains(USER.lastName);
-//       cy.contains(USER.email);
-//       cy.contains('Create at: June 20, 2025');
-//       cy.contains('Last update: June 20, 2025');
-//       cy.get('button[mat-raised-button]').should('exist');
-//     });
-//   });
-beforeEach(() => {
+  beforeEach(() => {
     cy.intercept('GET', '/api/session', (req) => {
       req.reply([]);
     });
@@ -100,7 +46,9 @@ beforeEach(() => {
       });
 
       cy.get('input[formControlName=email]').type('yoga@studio.com');
-      cy.get('input[formControlName=password]').type('test!1234{enter}{enter}');
+      cy.get('input[formControlName=password]').type('test!1234');
+      
+      cy.get('button[type=submit]').click()
 
       cy.url().should('include', '/sessions');
     });
@@ -120,6 +68,7 @@ beforeEach(() => {
       cy.get('button[mat-raised-button]').should('not.exist');
     });
   });
+
   describe('As a regular user', () => {
     beforeEach(() => {
       cy.visit('/login');
@@ -131,7 +80,9 @@ beforeEach(() => {
       });
 
       cy.get('input[formControlName=email]').type('user@user.com');
-      cy.get('input[formControlName=password]').type('test!1234{enter}{enter}');
+      cy.get('input[formControlName=password]').type('test!1234');
+      
+      cy.get('button[type=submit]').click()
 
       cy.url().should('include', '/sessions');
     });
