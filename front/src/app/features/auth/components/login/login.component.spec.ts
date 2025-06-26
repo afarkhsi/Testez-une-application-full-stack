@@ -44,9 +44,9 @@ describe('LoginComponent', () => {
       ],
       declarations: [LoginComponent],
       providers: [
-        { provide: AuthService,    useValue: authServiceMock },
+        { provide: AuthService, useValue: authServiceMock },
         { provide: SessionService, useValue: sessionServiceMock },
-        { provide: Router,         useValue: routerStub }
+        { provide: Router, useValue: routerStub }
       ]
     }).compileComponents();
 
@@ -73,7 +73,7 @@ describe('LoginComponent', () => {
     expect(component.form.valid).toBe(true);
   });
 
-  it('should succes on submit', fakeAsync(() => {
+  it('should success on submit', fakeAsync(() => {
     const loginSpy = jest
       .spyOn(authServiceMock, 'login' as any)
       .mockReturnValue(of(fakeSessionInfo));
