@@ -24,7 +24,7 @@ public class JwtUtilsUnitTest {
         jwtUtils = new JwtUtils();
         // Accès aux propriétés privées avec test context
         ReflectionTestUtils.setField(jwtUtils, "jwtSecret", "testSecret");
-        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 3_600_000); // 10 minutes
+        ReflectionTestUtils.setField(jwtUtils, "jwtExpirationMs", 3_600_000);
     }
 
     @Test

@@ -30,7 +30,7 @@ public class AuthEntryPointJwtUnitTest {
     }
 
     @Test
-    public void testCommence_shouldReturnUnauthorizedJsonResponse() throws IOException, ServletException {
+    public void testEntryPoint_shouldReturnUnauthorizedJsonResponse() throws IOException, ServletException {
         // Arrange
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
