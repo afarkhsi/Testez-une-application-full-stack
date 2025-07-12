@@ -10,6 +10,8 @@ import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.openclassrooms.starterjwt.exception.BadRequestException;
+import com.openclassrooms.starterjwt.exception.NotFoundException;
 import com.openclassrooms.starterjwt.models.Session;
 import com.openclassrooms.starterjwt.models.User;
 import com.openclassrooms.starterjwt.repository.SessionRepository;
@@ -173,6 +175,63 @@ public class SessionServiceUnitTest {
     }
     
     @Test
+    @DisplayName("participate throws NotFoundException when session is null")
+    public void testParticipateThrowsNotFoundExceptionWhenSessionNull() {
+        Long sessionId = 1L;
+        Long userId = 2L;
+
+        when(sessionRepository.findById(sessionId)).thenReturn(Optional.empty()); // session null
+        when(userRepository.findById(userId)).thenReturn(Optional.of(new User()));
+
+        assertThrows(NotFoundException.class, () -> {
+            sessionService.participate(sessionId, userId);
+        });
+
+        verify(sessionRepository).findById(sessionId);
+        verify(userRepository).findById(userId);
+    }
+
+    @Test
+    @DisplayName("participate throws NotFoundException when user is null")
+    public void testParticipateThrowsNotFoundExceptionWhenUserNull() {
+        Long sessionId = 1L;
+        Long userId = 2L;
+
+        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(new Session()));
+        when(userRepository.findById(userId)).thenReturn(Optional.empty()); // user null
+
+        assertThrows(NotFoundException.class, () -> {
+            sessionService.participate(sessionId, userId);
+        });
+
+        verify(sessionRepository).findById(sessionId);
+        verify(userRepository).findById(userId);
+    }
+    
+    @Test
+    @DisplayName("participate throws BadRequestException when user already participates")
+    public void testParticipateThrowsBadRequestExceptionWhenUserAlreadyParticipates() {
+        Long sessionId = 1L;
+        Long userId = 2L;
+
+        User user = new User();
+        user.setId(userId);
+
+        Session session = new Session();
+        session.setUsers(new ArrayList<>(Arrays.asList(user)));
+
+        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
+        when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        assertThrows(BadRequestException.class, () -> {
+            sessionService.participate(sessionId, userId);
+        });
+
+        verify(sessionRepository).findById(sessionId);
+        verify(userRepository).findById(userId);
+    }
+    
+    @Test
     @Tag("SessionService_noLongerParticipate")
     @DisplayName("User no longer participates successfully")
     public void testNoLongerParticipateSuccess() {
@@ -196,4 +255,38 @@ public class SessionServiceUnitTest {
 
         assertFalse(session.getUsers().contains(user));
     }
+    
+    @Test
+    @DisplayName("noLongerParticipate throws NotFoundException when session is null")
+    public void testNoLongerParticipateThrowsNotFoundExceptionWhenSessionNull() {
+        Long sessionId = 1L;
+        Long userId = 2L;
+
+        when(sessionRepository.findById(sessionId)).thenReturn(Optional.empty()); // session null
+
+        assertThrows(NotFoundException.class, () -> {
+            sessionService.noLongerParticipate(sessionId, userId);
+        });
+
+        verify(sessionRepository).findById(sessionId);
+    }
+    
+    @Test
+    @DisplayName("noLongerParticipate throws BadRequestException when user does not participate")
+    public void testNoLongerParticipateThrowsBadRequestExceptionWhenUserNotParticipating() {
+        Long sessionId = 1L;
+        Long userId = 2L;
+
+        Session session = new Session();
+        session.setUsers(new ArrayList<>()); // pas d'utilisateur
+
+        when(sessionRepository.findById(sessionId)).thenReturn(Optional.of(session));
+
+        assertThrows(BadRequestException.class, () -> {
+            sessionService.noLongerParticipate(sessionId, userId);
+        });
+
+        verify(sessionRepository).findById(sessionId);
+    }
+    
 }

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
@@ -147,6 +148,126 @@ public class UserUnitTest {
     
     
     @Test
+    void testRequiredArgsConstructorWithNullEmail() {
+        // Test de la vérification de nullité générée par Lombok pour @NonNull
+        assertThrows(NullPointerException.class, () -> {
+            new User(null, "Wick", "John", "password", false);
+        });
+    }
+    
+    @Test
+    void testRequiredArgsConstructorWithNullLastName() {
+        assertThrows(NullPointerException.class, () -> {
+            new User("john@wick.com", null, "John", "password", false);
+        });
+    }
+    
+    @Test
+    void testRequiredArgsConstructorWithNullFirstName() {
+        assertThrows(NullPointerException.class, () -> {
+            new User("john@wick.com", "Wick", null, "password", false);
+        });
+    }
+    
+    @Test
+    void testRequiredArgsConstructorWithNullPassword() {
+        assertThrows(NullPointerException.class, () -> {
+            new User("john@wick.com", "Wick", "John", null, false);
+        });
+    }
+    
+    @Test
+    void testAllArgsConstructorWithNullRequiredFields() {
+        LocalDateTime now = LocalDateTime.now();
+        
+        // Test avec email null
+        assertThrows(NullPointerException.class, () -> {
+            new User(1L, null, "Wick", "John", "password", false, now, now);
+        });
+        
+        // Test avec lastName null
+        assertThrows(NullPointerException.class, () -> {
+            new User(1L, "john@wick.com", null, "John", "password", false, now, now);
+        });
+        
+        // Test avec firstName null
+        assertThrows(NullPointerException.class, () -> {
+            new User(1L, "john@wick.com", "Wick", null, "password", false, now, now);
+        });
+        
+        // Test avec password null
+        assertThrows(NullPointerException.class, () -> {
+            new User(1L, "john@wick.com", "Wick", "John", null, false, now, now);
+        });
+    }
+    
+    @Test
+    void testBuilderWithNullRequiredFields() {
+        // Test du builder avec des champs @NonNull null
+        assertThrows(NullPointerException.class, () -> {
+            User.builder()
+                .email(null)
+                .lastName("Wick")
+                .firstName("John")
+                .password("password")
+                .admin(false)
+                .build();
+        });
+        
+        assertThrows(NullPointerException.class, () -> {
+            User.builder()
+                .email("john@wick.com")
+                .lastName(null)
+                .firstName("John")
+                .password("password")
+                .admin(false)
+                .build();
+        });
+        
+        assertThrows(NullPointerException.class, () -> {
+            User.builder()
+                .email("john@wick.com")
+                .lastName("Wick")
+                .firstName(null)
+                .password("password")
+                .admin(false)
+                .build();
+        });
+        
+        assertThrows(NullPointerException.class, () -> {
+            User.builder()
+                .email("john@wick.com")
+                .lastName("Wick")
+                .firstName("John")
+                .password(null)
+                .admin(false)
+                .build();
+        });
+    }
+    
+    @Test
+    void testSettersWithNullValues() {
+        User user = new User();
+        
+        // Test des setters avec valeurs null sur les champs @NonNull
+        assertThrows(NullPointerException.class, () -> {
+            user.setEmail(null);
+        });
+        
+        assertThrows(NullPointerException.class, () -> {
+            user.setLastName(null);
+        });
+        
+        assertThrows(NullPointerException.class, () -> {
+            user.setFirstName(null);
+        });
+        
+        assertThrows(NullPointerException.class, () -> {
+            user.setPassword(null);
+        });
+    }
+    
+    @Test
     void testEqualsWithNullId() {
         User user1 = User.builder().id(null).email("a@b.com").firstName("John").lastName("Test").password("pw").build();
         User user2 = User.builder().id(null).email("a@b.com").firstName("John").lastName("Test").password("pw").build();
@@ -170,6 +291,5 @@ public class UserUnitTest {
         assertTrue(str.contains("email"));
         assertTrue(str.contains("firstName"));
     }
-    
  
 }

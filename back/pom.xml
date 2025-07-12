@@ -122,6 +122,8 @@
 						<exclude>com/openclassrooms/starterjwt/dto*/**</exclude>
 						<exclude>com/openclassrooms/starterjwt/exception/**</exclude>
 						<exclude>com/openclassrooms/starterjwt/payload/**</exclude>
+						<exclude>**/SpringBootSecurityJwtApplication.class</exclude>
+                		<exclude>**/*Application.class</exclude>
 					</excludes>
 				</configuration>
 				<executions>
