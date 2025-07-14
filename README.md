@@ -1,7 +1,7 @@
 # Yoga - Numdev project
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
-![NumDev Logo](./ressources/images/banner-numdev.png)
+![NumDev Logo](./ressources/banner-numdev.png)
 
 Full-stack application developed with Angular and Java Spring Boot, aiming to manage a yoga studio platform.
 This project focuses on testing (unit, integration, and end-to-end) with a target coverage of 80%, including at least 30% integration tests.
